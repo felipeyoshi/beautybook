@@ -9,7 +9,7 @@ erDiagram
   %% =========================
   %% Dimensions
   %% =========================
-  DIM_PROFESSIONALFESSIONAL {
+  DIM_PROFESSIONAL {
     string professional_id PK
     string email
     string first_name
@@ -109,7 +109,7 @@ erDiagram
     int    message_sent_hour
     string message_type
     boolean has_attachment
-    string booking_id FK_nullable
+    string booking_id FK
   }
 
   %% =========================
