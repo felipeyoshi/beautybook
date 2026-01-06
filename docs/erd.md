@@ -115,7 +115,6 @@ erDiagram
   %% =========================
   %% Pro Engagement Rollups (Gold Pro Engagement schema)
   %% =========================
-
   FCT_MESSAGE_RESPONSES {
     string client_message_id PK
     string pro_reply_message_id
