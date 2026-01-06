@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: fct_message_responses
+    description: >
+      Derived response pairs (1 row per client message that receives a next pro reply in the same thread).
+      Response time is measured as (pro_reply_sent_at - client_message_sent_at) in seconds.
+    columns:
+      - name: client_message_id
+        description: "Unique identifier for the client message that initiated the response window."
+        tests: [not_null, unique]
+      - name: pro_reply_message_id
+        description: "Message id of the next pro reply in the thread."
+        tests: [not_null]
+      - name: response_time_seconds
+        description: "Seconds between client message and next pro reply."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 604800 # up to 7 days
+              strictly: false

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: fct_sessions
+    description: "Atomic session fact (1 row per session_id). Used for engagement frequency/duration and day/time patterns."
+    columns:
+      - name: session_id
+        description: "Primary key for a session."
+        tests: [not_null, unique]
+      - name: professional_id
+        description: "FK to dim_professional."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_professional')
+              field: professional_id
+      - name: session_start_at
+        description: "Session start timestamp."
+        tests: [not_null]
+      - name: session_end_at
+        description: "Session end timestamp."
+        tests: [not_null]
+      - name: session_duration_seconds
+        description: "Derived session duration in seconds."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 86400
+              strictly: false

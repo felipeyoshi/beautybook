@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_time
+    description: "Conformed hour-of-day dimension for day/time engagement analysis."
+    columns:
+      - name: time_id
+        description: "Surrogate key for hour_of_day."
+        tests: [not_null, unique]
+      - name: hour_of_day
+        description: "Hour of day (0-23)."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 23
+      - name: time_bucket
+        description: "Coarse bucket: morning/afternoon/evening/night."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ["morning", "afternoon", "evening", "night"]

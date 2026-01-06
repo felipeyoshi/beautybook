@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: fct_messages
+    description: "Atomic messages fact (1 row per message_id). Used for engagement signals and response-time derivations."
+    columns:
+      - name: message_id
+        description: "Primary key for a message."
+        tests: [not_null, unique]
+      - name: professional_id
+        description: "FK to dim_professional."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_professional')
+              field: professional_id
+      - name: client_id
+        description: "FK to dim_client."
+        tests:
+          - relationships:
+              to: ref('dim_client')
+              field: client_id
+      - name: sender_type
+        description: "Who sent the message: pro or client."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ["pro", "client"]
+      - name: message_sent_at
+        description: "Timestamp message was sent."
+        tests: [not_null]

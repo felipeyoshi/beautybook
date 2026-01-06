@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: dim_service
+    description: "Service dimension derived from distinct service_name in bookings."
+    columns:
+      - name: service_id
+        description: "Surrogate key for service_name."
+        tests: [not_null, unique]
+      - name: service_name
+        description: "Raw service name from bookings."
+        tests: [not_null, unique]

@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: fct_bookings
+    description: >
+      Atomic booking fact (1 row per booking_id). Supports segmented conversion rates and booking volume analysis.
+    columns:
+      - name: booking_id
+        description: "Primary key for a booking."
+        tests: [not_null, unique]
+      - name: professional_id
+        description: "FK to dim_professional."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_professional')
+              field: professional_id
+      - name: client_id
+        description: "FK to dim_client."
+        tests:
+          - relationships:
+              to: ref('dim_client')
+              field: client_id
+      - name: booking_created_at
+        description: "Timestamp when booking was created."
+        tests: [not_null]
+      - name: booking_amount
+        description: "Booking amount (non-negative)."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: false
+      - name: tip_amount
+        description: "Tip amount (non-negative)."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: false

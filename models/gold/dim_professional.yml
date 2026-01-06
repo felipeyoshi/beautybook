@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_professional
+    description: >
+      Professional dimension with segmentation attributes required for conversion analysis:
+      cohort, service category, and location (city/state), plus subscription and profile quality signals.
+    columns:
+      - name: professional_id
+        description: "Primary key for a professional."
+        tests: [not_null, unique]
+      - name: service_category
+        description: "Primary service category of the professional."
+        tests: [not_null]
+      - name: city
+        description: "Professional city."
+      - name: state
+        description: "Professional state."
+      - name: signup_date
+        description: "Date the professional signed up."
+        tests: [not_null]
+      - name: tenure_days
+        description: "Days since signup_date as of model build time."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: false
+      - name: cohort
+        description: "Cohort segmentation derived from signup year."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ["2021", "2022", "2023", "2024", "2025"]

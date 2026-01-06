@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: dim_client
+    description: "Minimal client dimension conformed from client_id in bookings and messages."
+    columns:
+      - name: client_id
+        description: "Primary key for a client."
+        tests: [not_null, unique]

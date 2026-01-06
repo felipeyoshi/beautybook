@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: "{{ var('raw_source_name') }}"
+    database: "{{ var('raw_database') }}"
+    schema: "{{ var('raw_schema') }}"
+    tables:
+      - name: pros
+      - name: bookings
+      - name: sessions
+      - name: messages

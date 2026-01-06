@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: fct_professional_metrics_daily
+    description: >
+      Pro-day rollup combining sessions, messages, response-time, and booking outcomes.
+      Conversion 'success' is defined as booking_status in ('confirmed','completed') for the initial implementation.
+    columns:
+      - name: professional_id
+        description: "FK to dim_professional."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_professional')
+              field: professional_id
+      - name: date_day
+        description: "Calendar date for the rollup."
+        tests: [not_null]
+      - name: sessions_count
+        description: "Number of sessions for the pro on the date."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: false
+      - name: bookings_created_count
+        description: "Bookings created on the date."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: false
+      - name: conversion_rate_created_to_success
+        description: "Success/created conversion rate; null when bookings_created_count = 0."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 1
+              strictly: false

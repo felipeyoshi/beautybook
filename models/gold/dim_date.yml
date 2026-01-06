@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Conformed calendar date dimension used across all Gold facts and rollups."
+    columns:
+      - name: date_id
+        description: "Surrogate key for the date (hash of date_day)."
+        tests: [not_null, unique]
+      - name: date_day
+        description: "Calendar date."
+        tests: [not_null, unique]
+      - name: day_of_week
+        description: "Day of week (warehouse-specific numbering)."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 6
